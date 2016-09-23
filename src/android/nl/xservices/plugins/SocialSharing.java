@@ -41,6 +41,7 @@ public class SocialSharing extends CordovaPlugin {
   private static final String ACTION_SHARE_WITH_OPTIONS_EVENT = "shareWithOptions";
   private static final String ACTION_CAN_SHARE_VIA = "canShareVia";
   private static final String ACTION_CAN_SHARE_VIA_EMAIL = "canShareViaEmail";
+  private static final String ACTION_CAN_SHARE_VIA_SMS = "canShareViaSms";
   private static final String ACTION_SHARE_VIA = "shareVia";
   private static final String ACTION_SHARE_VIA_TWITTER_EVENT = "shareViaTwitter";
   private static final String ACTION_SHARE_VIA_FACEBOOK_EVENT = "shareViaFacebook";
@@ -98,6 +99,14 @@ public class SocialSharing extends CordovaPlugin {
       return doSendIntent(callbackContext, args.getString(0), args.getString(1), args.getJSONArray(2), args.getString(3), "instagram", null, false, true);
     } else if (ACTION_CAN_SHARE_VIA.equals(action)) {
       return doSendIntent(callbackContext, args.getString(0), args.getString(1), args.getJSONArray(2), args.getString(3), args.getString(4), null, true, true);
+    } else if (ACTION_CAN_SHARE_VIA_SMS.equals(action)) {
+      if (isSmsAvailable()) {
+        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
+        return true;
+      } else {
+        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, "not available"));
+        return false;
+      }
     } else if (ACTION_CAN_SHARE_VIA_EMAIL.equals(action)) {
       if (isEmailAvailable()) {
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
@@ -121,6 +130,11 @@ public class SocialSharing extends CordovaPlugin {
   private boolean isEmailAvailable() {
     final Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "someone@domain.com", null));
     return cordova.getActivity().getPackageManager().queryIntentActivities(intent, 0).size() > 0;
+  }
+
+  private boolean isSmsAvailable() {
+    Activity ctx = this.cordova.getActivity();
+    return ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
   }
 
   private boolean invokeEmailIntent(final CallbackContext callbackContext, final String message, final String subject, final JSONArray to, final JSONArray cc, final JSONArray bcc, final JSONArray files) throws JSONException {

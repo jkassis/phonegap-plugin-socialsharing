@@ -79,6 +79,14 @@ SocialSharing.prototype.canShareViaEmail = function (successCallback, errorCallb
   cordova.exec(successCallback, this._getErrorCallback(errorCallback, "canShareViaEmail"), "SocialSharing", "canShareViaEmail", []);
 };
 
+SocialSharing.prototype.canShareViaSMS = function (successCallback, errorCallback) {
+  if(cordova.platformId === "android") {
+    cordova.exec(successCallback, this._getErrorCallback(errorCallback, "canShareViaSms"), "SocialSharing", "canShareViaSms", []);
+  } else {
+    cordova.exec(successCallback, this._getErrorCallback(errorCallback, "canShareVia"), "SocialSharing", "canShareVia", ["", "", null, null, "sms"]);
+  }
+};
+
 SocialSharing.prototype.shareViaInstagram = function (message, fileOrFileArray, successCallback, errorCallback) {
   cordova.exec(successCallback, this._getErrorCallback(errorCallback, "shareViaInstagram"), "SocialSharing", "shareViaInstagram", [message, null, this._asArray(fileOrFileArray), null]);
 };
