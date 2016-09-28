@@ -46,7 +46,17 @@
 		<string>fb</string>
       </array>
     </config-file>
-    
+
+   <config-file target="*-Info.plist" parent="SocialSharingExcludeActivities">
+      <array>
+        <string>com.apple.UIKit.activity.AssignToContact</string>
+        <string>com.apple.UIKit.activity.CopyToPasteboard</string>
+        <string>com.apple.UIKit.activity.AddToReadingList</string>      
+        <string>com.apple.UIKit.activity.Print</string>
+        <string>com.apple.UIKit.activity.SaveToCameraRoll</string>                
+      </array>
+    </config-file> 
+        
     <header-file src="src/ios/NSString+URLEncoding.h"/>
     <source-file src="src/ios/NSString+URLEncoding.m"/>
     <header-file src="src/ios/SocialSharing.h"/>
